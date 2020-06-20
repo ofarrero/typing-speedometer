@@ -6,6 +6,7 @@ const theTimer = document.querySelector(".timer");
 
 var timer = [0,0,0,0];
 var interval;
+var timerRunning = false;
 
 // Add leading zero to numbers 9 or below (purely for aesthetics):
 function leadingZero(time){
@@ -42,7 +43,7 @@ function spellCheck(){
       testWrapper.style.borderColor = "#65CCf3";
     }
     else{
-        testWrapper.style.borderColor = "#E95D0F";
+        testWrapper.style.borderColor = "#E95D0F";//add error counter
     }
   }
 
@@ -53,7 +54,8 @@ function spellCheck(){
 function start(){
   let textEnteredLength = testArea.value.length;
 
-  if(textEnteredLength===0){
+  if(textEnteredLength === 0 && !timerRunning){
+    timerRunning = true;
     interval=setInterval(runTimer, 10);
   }
 
@@ -61,8 +63,19 @@ function start(){
 
 
 // Reset everything:
+function reset(){
+  clearInterval(interval);
+  interval = null;
+  timer = [0,0,0,0];
+  timerRunning = false;
+
+  testArea.value="";
+  theTimer.innerHTML= "00:00:00";
+  testWrapper.style.borderColor = "grey";
+}
 
 
 // Event listeners for keyboard input and the reset button:
 testArea.addEventListener("keypress", start, false);
 testArea.addEventListener("keyup", spellCheck, false);
+resetButton.addEventListener("click", reset, false);
